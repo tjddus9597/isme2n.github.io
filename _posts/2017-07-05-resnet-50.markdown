@@ -6,6 +6,7 @@ categories: project
 tags: dnn architecture
 ---
 
+```lua
 nn.Sequential {
   [input -> (1) -> (2) -> (3) -> (4) -> (5) -> (6) -> (7) -> (8) -> (9) -> (10) -> (11) -> output]
   (1): cudnn.SpatialConvolution(3 -> 64, 7x7, 2,2, 3,3)
@@ -364,3 +365,4 @@ nn.Sequential {
   (10): nn.View(2048)
   (11): nn.Linear(2048 -> 1000)
 }
+```
