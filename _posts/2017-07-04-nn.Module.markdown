@@ -8,43 +8,53 @@ tags: torch library
 
 ### forward(input)
 Tensor input으로 받아 layer에 넘긴다.
-forward module은 **updateOutput(input)**을 실행시켜서 output을 얻어냄
+forward module은 `updateOutput(input)`을 실행시켜서 output을 얻어냄
+
 
 ### backward(input, gradOutput)
 backpropagation 실행 하는 함수
-**updateGradInput(input, gradOutput)**
-**accGradParameters(input,gradOutput,scale)** 함수 call
+`updateGradInput(input, gradOutput)`
+`accGradParameters(input,gradOutput,scale)` 함수 call
 
 >프로젝트에서 gradOuput는 grad_embed의 변수이름을 가지고있음 
+
 
 ### updateOutput(input)
 class의 현재 parameter set과 input을 이용하여 output을 계산
 이 함수는 output field안에 있는 결과를 return함.
 
+
 ### updateGradInput(input,gradOutput)
 own input과 관련있게 module의 gradient를 계산한다.
 gradInput으로 return 됨. 또한, gradInput state variable은 그에 따라 update됨.
+
 
 ### accGradParameters(input,gradOutput, scale)
 own parameter와 관련하여 모듈의 gradient를 계산한다.
 많은 모듈은 매개 변수가 없으므로 이 단계를 수행하지 않는다.
 매개 변수의 상태 변수 이름은 모듈에 따라 다르다. 모듈은 일부 변수의 매개변수와 관련하여 gradient를 누적한다.
 
+
 ### zeroGradParameters()
 만약 모듈이 paramter들을 가지고 있으면, accGradParameters call을 통해서 누적된 매개변수에 대한 gradient의 누적 값을 0 으로 만든다. 아니면 아무것도 수행하지 않는다.
 
+
 ### [{weights},{gradWeights}] parameters()
 이 함수는 2개의 table을 반환한다. 하나는 learnable parameters {weights} 그리고 다른 하나는 학습 매개변수 {gradWeights}의 에너지 기울기를 반환한다.
+
 
 ### [flatParameters, flatGradParameters] getParameters()
 이 함수는 2개의 tensor를 반환한다. 하나는 flattend learable parameter `flatParameters`와 학습 매개변수 `flatGradParameters`를 반환한다.
 매 weight와 gradWeight의 storage가 바뀌기 때문에, 이 함수는 주어진 network에서 한번만 불려야 한다.
 
+
 ### training()
 이것은 module의 상태를 `train=true`로 바꾼다. 이것은 training vs evaluation 동안 다른 행동을 갖는 Dropout이나 BatchNormalization 같은 모듈에 유용하다.
 
+
 ### evaluate()
 이것은 module의 상태를 `train=false`로 바꾼다. 이것은 training vs evaluation 동안 다른 행동을 갖는 Dropout이나 BatchNormalization 같은 모듈에 유용하다.
+
 
 ### apply(function)
 ```lua
