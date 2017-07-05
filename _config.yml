@@ -1,22 +1,21 @@
 # Site settings
-title:  "메타개발자" 
+title:  "초짜 VL 석사생" 
 header-img: img/about-bg.jpg
-email: zooqzqz@gmail.com
-copyright_name: isme2n/메타개발자
-description: "개발자를 위한 개발자"
+email: tjddus9597@dgist.ac.kr
+copyright_name: tjddus9597/초짜 VL 석사생
+description: "개발자를생 위한 개발자"
 baseurl: ""
-url: "http://isme2n.github.io"
-twitter_username: isme2n 
-github_username:  isme2n
-facebook_username:  zooqzqz
-email_username:  zooqzqz@gmail.com
+url: "http://tjddus9597.github.io"
+github_username:  tjddus9597
+facebook_username:  tjddus9597
+email_username:  tjddus9597@dgist.ac.kr
 
 # Google Analytics
 # To enable google analytics, uncomment below line with a valid Google Tracking ID
 google_tracking_id: UA-92346434-1
 
 # Disqus comments
-disqus_shortname: isme2n
+disqus_shortname: tjddus9597
 
 # Build settings
 markdown: kramdown
