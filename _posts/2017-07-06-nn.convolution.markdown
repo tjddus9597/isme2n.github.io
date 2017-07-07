@@ -1,0 +1,21 @@
+---
+layout: post
+title: "[torch] nn.convolution docs 정리"
+subtitle:   "nn.convolution 사용법"
+categories: torch
+tags: torch library
+---
+
+###SpatialConvolution
+```lua
+module = nn.SpatialConvolution(nInputPlane, nOutputPlane, kW, kH, [dW], [dH], [padW], [padH])
+```
+
+`nInputPlane` : forward()로 들어갈 image안의 기대되는 plane 수
+`nOutputPlane` : convolution layer이 만들어낼 output plane의 수
+`kW` : convolution 커널의 width
+`kH` : convolution 커널의 height
+`dW` : width Dimension 안의 convolution의 step. Default는 1
+`dH` : height Dimension 안의 convolution의 step. Default는 1
+`padW` : width방향의 zero Padding의 수. Default 는 0이고 `(kW-1)/2`가 일반적으로 사용됨
+`padH` : height방향의 zero Padding의 수. Default 는 0이고 `(kH-1)/2`가 일반적으로 사용됨

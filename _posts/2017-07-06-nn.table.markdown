@@ -1,0 +1,132 @@
+---
+layout: post
+title: "[torch] nn.table docs 정리"
+subtitle:   "nn.table 사용법"
+categories: torch
+tags: torch library
+---
+
+###ConcatTable
+```lua
+module = nn.ConcatTable()
+```
+
+`ConcatTable`은 각모듈을 동일한 input Tensor 또는 Table에 적용하는 Container module이다.
+
+```lua
+                  +-----------+
+             +----> {member1, |
++-------+    |    |           |
+| input +----+---->  member2, |
++-------+    |    |           |
+   or        +---->  member3} |
+ {input}          +-----------+
+ ```
+
+ ###Example 1
+ ```lua
+mlp = nn.ConcatTable()
+mlp:add(nn.Linear(5, 2))
+mlp:add(nn.Linear(5, 3))
+
+pred = mlp:forward(torch.randn(5))
+for i, k in ipairs(pred) do print(i, k) end
+```
+
+which gives the output:
+```lua
+1
+-0.4073
+ 0.0110
+[torch.Tensor of dimension 2]
+
+2
+ 0.0027
+-0.0598
+-0.1189
+[torch.Tensor of dimension 3]
+```
+
+###ParallelTable
+```lua
+module = nn.ParallelTable()
+```
+
+```lua
++----------+         +-----------+
+| {input1, +---------> {member1, |
+|          |         |           |
+|  input2, +--------->  member2, |
+|          |         |           |
+|  input3} +--------->  member3} |
++----------+         +-----------+
+```
+
+ex)
+```lua
+mlp = nn.ParallelTable()
+mlp:add(nn.Linear(10, 2))
+mlp:add(nn.Linear(5, 3))
+
+x = torch.randn(10)
+y = torch.rand(5)
+
+pred = mlp:forward{x, y}
+for i, k in pairs(pred) do print(i, k) end
+```
+
+result
+```lua
+1
+ 0.0331
+ 0.7003
+[torch.Tensor of dimension 2]
+
+2
+ 0.0677
+-0.1657
+-0.7383
+[torch.Tensor of dimension 3]
+```
+
+###CAddTable
+```lua
+module=CAddTable([inplace])
+```
+
+ex)
+```lua
+ii = {torch.ones(5), torch.ones(5)*2, torch.ones(5)*3}
+=ii[1]
+ 1
+ 1
+ 1
+ 1
+ 1
+[torch.DoubleTensor of dimension 5]
+
+return ii[2]
+ 2
+ 2
+ 2
+ 2
+ 2
+[torch.DoubleTensor of dimension 5]
+
+return ii[3]
+ 3
+ 3
+ 3
+ 3
+ 3
+[torch.DoubleTensor of dimension 5]
+
+m = nn.CAddTable()
+=m:forward(ii)
+ 6
+ 6
+ 6
+ 6
+ 6
+[torch.DoubleTensor of dimension 5]
+```
