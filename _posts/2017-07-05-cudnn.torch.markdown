@@ -1,0 +1,11 @@
+---
+layout: post
+title: "[torch] cudnn docs 정리"
+subtitle:   "cudnn 사용법"
+categories: torch
+tags: torch library
+---
+
+#cudnn
+
+cudnn.SpatialConvolution(nInputPlane, nOutputPlane, kW, kH, [dW = 1], [dH = 1], [padW = 0], [padH = 0], [groups = 1])

@@ -1,0 +1,13 @@
+---
+layout: post
+title: "[project] resnet-50 architecture 정리"
+subtitle:   "resnet-50 구조를 차근차근 정리해본다!!"
+categories: project
+tags: dnn architecture
+---
+징
+###resnet 특징
+1.  출력 feature-map 크기가 같은 경우, 해당 모든 layer는 모두 동일한 수의 filter를 갖는다.
+
+2.  Feature-map의 크기가 절반으로 작아지는 경우는 연산량의 균형을 맞추기 위해 필터의 수를 두 배로 늘린다. Feature-map의 크기를 줄일 때는 pooling을 사용하는 대신에 convolution을 수행할 때, stride의 크기를 “2”로 하는 방식을 취한다.
+
