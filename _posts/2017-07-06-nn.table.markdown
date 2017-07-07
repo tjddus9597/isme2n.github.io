@@ -6,7 +6,7 @@ categories: torch
 tags: torch library
 ---
 
-###ConcatTable
+### ConcatTable
 ```lua
 module = nn.ConcatTable()
 ```
@@ -52,7 +52,7 @@ which gives the output:
 module = nn.ParallelTable()
 ```
 
-```lua
+```
 +----------+         +-----------+
 | {input1, +---------> {member1, |
 |          |         |           |
