@@ -46,7 +46,7 @@ qdist_pose = dist_pose(is_query, ~is_query);
 ```
 dist_pose : 포즈 distance를 나타낸 matrix
 
-ex)
+ex) dist_pose(1:5, 1:5)
 ```
          0   14.5595   15.3691   36.7705   24.1138
    14.5595         0   14.0480   30.2159   21.2464
@@ -56,7 +56,7 @@ ex)
 ```
 
 qdist_pose : query distance pose로 dist_pose(1:1919,1920:9919) <br />
-* 단, data idx는 거리별로 정리되어있지 않음. 그냥 이미지 번호
+단, data idx는 거리별로 정리되어있지 않음. 그냥 이미지 번호
 
 ```Matlab
 % pairwise distances between embedded vectors
@@ -65,18 +65,20 @@ dist_emb = bsxfun(@plus, sum(embed_val .* embed_val, 1)', (-2) * embed_val' * em
 
 `embed_val .* embed_val` : embed_val element들 제곱 <br />
 `sum(embed_val .* embed_val, 1)'` : 각 image들의 embedding의 각 차원의 value를 모두 합친 것 <br />
-``` d1_1^2 + d1_2^2 ... d1_128^2``` <br />
-``` d2_1^2 + d2_2^2 ... d2_128^2```
+```
+d1_1^2 + d1_2^2 ... d1_128^2
+d2_1^2 + d2_2^2 ... d2_128^2
+```
 
 `(-2) * embed_val' * embed_val` : 
 d1_2 : 1st image, 2nd dimension
-$$
-\left(\begin{array}{cc} 
+$$\begin{array}
+{rr}
 (d1_1^2+d1_2^2+d1_3^2...)*(-2) & (d1_1*d2_1+d1_2*d2_2+d1_3*d2_3...)*(-2)\\
 (d1_1*d2_1+d1_2*d2_2+d1_3*d2_3...)*(-2) & (d2_1^2+d2_2^2+d2_3^2...)*(-2)\\
 (d1_1*d3_1+d1_2*d3_2+d1_3*d3_3...)*(-2)
-\end{array}\right)
-$$
+$$\begin{array}
+{rr}
 
 ``` Matlab
 dist_emb = bsxfun(@plus, sum(embed_val .* embed_val, 1), dist_emb);
