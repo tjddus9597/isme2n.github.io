@@ -81,6 +81,11 @@ $$\begin{array}
 $$\begin{array}
 {rr}
 
+!!!!!!!!!!!!!!!!!!!!!
+$$\int_0^{2\pi} \sin x~dx$$
+
+
+
 ``` Matlab
 dist_emb = bsxfun(@plus, sum(embed_val .* embed_val, 1), dist_emb);
 ```
