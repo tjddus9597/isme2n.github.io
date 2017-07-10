@@ -69,7 +69,9 @@ dist_emb = bsxfun(@plus, sum(embed_val .* embed_val, 1)', (-2) * embed_val' * em
 d1_1^2 + d1_2^2 ... d1_128^2
 d2_1^2 + d2_2^2 ... d2_128^2
 ```
+html header: <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
+출처: http://dataleaf.tistory.com/entry/Markdown에서-수식-입력하기 [정보의 잎사귀]
 `(-2) * embed_val' * embed_val` : 
 d1_2 : 1st image, 2nd dimension
 $$\begin{array}
