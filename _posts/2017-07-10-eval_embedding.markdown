@@ -65,18 +65,18 @@ dist_emb = bsxfun(@plus, sum(embed_val .* embed_val, 1)', (-2) * embed_val' * em
 
 `embed_val .* embed_val` : embed_val element들 제곱 <br />
 `sum(embed_val .* embed_val, 1)'` : 각 image들의 embedding의 각 차원의 value를 모두 합친 것 <br />
-``` d1_1^2 + d1_2^2 ... d1_128^2```
-``` d2_1^2 + d2_2^2 ... d1_128^2```
+``` d1_1^2 + d1_2^2 ... d1_128^2``` <br />
+``` d2_1^2 + d2_2^2 ... d2_128^2```
 
 `(-2) * embed_val' * embed_val` : 
 d1_2 : 1st image, 2nd dimension
-```
-(d1_1^2+d1_2^2+d1_3^2...)*(-2)           (d1_1*d2_1+d1_2*d2_2+d1_3*d2_3...)*(-2)
-
-(d1_1*d2_1+d1_2*d2_2+d1_3*d2_3...)*(-2)  (d2_1^2+d2_2^2+d2_3^2...)*(-2)
-
+$$
+\left(\begin{array}{cc} 
+(d1_1^2+d1_2^2+d1_3^2...)*(-2) & (d1_1*d2_1+d1_2*d2_2+d1_3*d2_3...)*(-2)\\
+(d1_1*d2_1+d1_2*d2_2+d1_3*d2_3...)*(-2) & (d2_1^2+d2_2^2+d2_3^2...)*(-2)\\
 (d1_1*d3_1+d1_2*d3_2+d1_3*d3_3...)*(-2)
-````
+\end{array}\right)
+$$
 
 ``` Matlab
 dist_emb = bsxfun(@plus, sum(embed_val .* embed_val, 1), dist_emb);
