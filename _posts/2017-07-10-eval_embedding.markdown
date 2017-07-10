@@ -76,7 +76,7 @@ d1_2 : 1st image, 2nd dimension
 (d1_1*d2_1+d1_2*d2_2+d1_3*d2_3...)*(-2)  (d2_1^2+d2_2^2+d2_3^2...)*(-2)
 
 (d1_1*d3_1+d1_2*d3_2+d1_3*d3_3...)*(-2)
-```
+````
 
 ``` Matlab
 dist_emb = bsxfun(@plus, sum(embed_val .* embed_val, 1), dist_emb);
@@ -92,6 +92,7 @@ dist_emb = bsxfun(@plus, sum(embed_val .* embed_val, 1), dist_emb);
 ((d1_1-d2_1)^2+(d1_2-d2_2)^2 ...)       0
 ```
 
+``` Matlab
  % distances between query and DB, on the embedding space
 qdist_emb = dist_emb(is_query, ~is_query);
 [~, NN_emb] = sort(qdist_emb, 2);
