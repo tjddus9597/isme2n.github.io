@@ -93,7 +93,7 @@ $$
 \end{bmatrix}
 $$
 
-즉 <br /><br />
+즉
 
 $$
 \begin{bmatrix}
