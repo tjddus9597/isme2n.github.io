@@ -93,7 +93,9 @@ $$
 \end{bmatrix}
 $$
 
-즉
+$$
+=
+$$
 
 $$
 \begin{bmatrix}
