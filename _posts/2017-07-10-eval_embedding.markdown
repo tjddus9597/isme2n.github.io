@@ -134,7 +134,7 @@ nneg = math.max(math.min(gt_dist:gt(self.mxd):sum(), m-1), 1)
 ```
 gt_dist에서 self.mxd보다 큰 것들의 개수, (단 m-1보다 작야 하고, 1보단 커야함)
 
-```lua
+```
 -- uniform weight coefficients (except "don't care" triplets)
 self.wgt:resize(indc:size()):copy(indc)            -- GT-dist based weights & order constraints
 self.wgt[{{m-nneg+1, m}, {m-nneg+1, m}}] = 0       -- excluding don't care triplets
