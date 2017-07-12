@@ -106,9 +106,25 @@ $$
 
 
 ### FTEmbed.lua
-
--- ground-truth (pose) distances
 ```lua
+local idxs = torch.range(1, m):cuda()
+local indc = torch.lt(idxs:repeatTensor(m, 1):t(), idxs:repeatTensor(m, 1))   -- 1(i < j)
+local dist = (a:repeatTensor(m, 1) - p):pow(2):sum(2):reshape(m)     
+```
+
+idxs : 1, 2, 3 .. 63
+indc : 
+```
+0 1 1 1 1 1
+0 0 1 1 1 1
+0 0 0 1 1 1
+0 0 0 0 1 1
+0 0 0 0 0 1 ...
+```
+dist : ({1,2 distance}, {1,3 distance}) ... 63개
+
+```lua
+-- ground-truth (pose) distances
 gt_dist[gt_dist:lt(self.mnd)] = self.mnd
 ```
 gt_dist에서 self.mnd보다 less than(작은) element들을 self.mnd로 바꿔줌
@@ -119,6 +135,7 @@ nneg = math.max(math.min(gt_dist:gt(self.mxd):sum(), m-1), 1)
 gt_dist에서 self.mxd보다 큰 것들의 개수, (단 m-1보다 작야 하고, 1보단 커야함)
 
 ```lua
+-- uniform weight coefficients (except "don't care" triplets)
 self.wgt:resize(indc:size()):copy(indc)            -- GT-dist based weights & order constraints
 self.wgt[{{m-nneg+1, m}, {m-nneg+1, m}}] = 0       -- excluding don't care triplets
 self.wgt:div(self.wgt:sum())                       -- normalization
@@ -144,3 +161,27 @@ nneg 개수에 따라서 아래 부분을 0으로 만들어줌 ex) nneg = 3
 ```
 self.wgt:div(self.wgt:sum()) <br>
 총 개수 만큼 나눔 (normalization)
+```
+0.001 *
+  0       5.4645  5.4645  5.4645  5.4645  5.4645
+  0       0       5.4645  5.4645  5.4645  5.4645
+  0       0       0       0       0       0
+  0       0       0       0       0       0
+  0       0       0       0       0       0
+  0       0       0       0       0       0
+```
+
+```lua
+-- loss per individual triplet
+local loss = (dist:repeatTensor(m, 1):t() - dist:repeatTensor(m, 1)):add(self.mrg)
+loss:cmul(self.wgt):clamp(0, loss:max())
+```
+> dist : ({1,2 distance}, {1,3 distance}) ... 63개 <br>
+loss =>
+$$
+\begin{bmatrix}
+d(1,2)-d(1,2) & d(1,2)-d(1,3) \\
+d(1,3)-d(1,2) & d(1,2)-d(1,3) \\
+d(1,4)-d(1,2) & \ddots
+\end{bmatrix}
+$$
