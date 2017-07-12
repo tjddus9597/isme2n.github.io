@@ -33,7 +33,6 @@ embed_all:sub(idx_trn_stt, idx_trn_end):copy(embed:sub(1, idx_trn_end - idx_trn_
 모든 embed 값들
 
 <br />
-<br />
 ### eval_retrieval.m
 
 ```Matlab
@@ -104,7 +103,7 @@ $$
 \end{bmatrix}
 $$
 
-
+<br />
 ### FTEmbed.lua
 ```lua
 local idxs = torch.range(1, m):cuda()
@@ -180,6 +179,7 @@ local loss = (dist:repeatTensor(m, 1):t() - dist:repeatTensor(m, 1)):add(self.mr
 loss:cmul(self.wgt):clamp(0, loss:max())
 ```
 > dist : ({1,2 distance}, {1,3 distance}) ... 63개 <br>
+
 loss =>
 $$
 \begin{bmatrix}
@@ -188,3 +188,23 @@ d(1,3)-d(1,2) & d(1,2)-d(1,3) \\
 d(1,4)-d(1,2) & \ddots
 \end{bmatrix} + self.mrg
 $$
+
+일반적으로 d(1,2)-d(1,3)>0, d(1,3)-d(1,2)<0 일 것임 <br>
+ex) d(1,2) = 30-40 = -10, d(1,3) = 30 - 60 = -30 <br>
+d(1,2)-d(1,3) = 20 > 0
+
+loss:cmul(self.wgt):`clamp(0, loss:max())`
+위에서 얻은 loss에 self.wgt(normalization한 weight)를 곱하고
+`0보다 작은 것들을 0으로 만들어줌`
+
+```lua
+-- update the weight coefficients
+self.wgt:cmul(loss:gt(0):cuda())
+```
+loss가 0보다 큰 것들만 wgt에 곱해줌
+
+```lua
+-- loss of this mini-batch
+self.output = loss:sum()
+```
+loss들을 다 더함 -> 최종 loss
