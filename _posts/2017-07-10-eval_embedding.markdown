@@ -103,3 +103,44 @@ $$
 \vdots & \vdots & \ddots
 \end{bmatrix}
 $$
+
+
+### FTEmbed.lua
+
+-- ground-truth (pose) distances
+```lua
+gt_dist[gt_dist:lt(self.mnd)] = self.mnd
+```
+gt_dist에서 self.mnd보다 less than(작은) element들을 self.mnd로 바꿔줌
+
+```lua
+nneg = math.max(math.min(gt_dist:gt(self.mxd):sum(), m-1), 1)
+```
+gt_dist에서 self.mxd보다 큰 것들의 개수, (단 m-1보다 작야 하고, 1보단 커야함)
+
+```lua
+self.wgt:resize(indc:size()):copy(indc)            -- GT-dist based weights & order constraints
+self.wgt[{{m-nneg+1, m}, {m-nneg+1, m}}] = 0       -- excluding don't care triplets
+self.wgt:div(self.wgt:sum())                       -- normalization
+```
+self.wgt:resize(indc:size()):copy(indc) <br>
+self.wgt를 indc크기로 맞추고 indc와 같게 만듬
+
+```
+0 1 1 1 1 1
+0 0 1 1 1 1
+0 0 0 1 1 1
+0 0 0 0 1 1
+0 0 0 0 0 1 ...
+```
+self.wgt[{{m-nneg+1, m}, {m-nneg+1, m}}] = 0 <br>
+nneg 개수에 따라서 아래 부분을 0으로 만들어줌 ex) nneg = 3
+```
+0 1 1 1 1 1
+0 0 1 1 1 1
+0 0 0 0 0 0
+0 0 0 0 0 0 
+0 0 0 0 0 0 ...
+```
+self.wgt:div(self.wgt:sum()) <br>
+총 개수 만큼 나눔 (normalization)
