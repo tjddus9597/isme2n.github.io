@@ -189,9 +189,9 @@ d(1,4)-d(1,2) & \ddots
 \end{bmatrix} + self.mrg
 $$
 
-일반적으로 d(1,2)-d(1,3)>0, d(1,3)-d(1,2)<0 일 것임 <br>
-ex) d(1,2) = 30-40 = -10, d(1,3) = 30 - 60 = -30 <br>
-d(1,2)-d(1,3) = 20 > 0
+일반적으로 d(1,2)-d(1,3)<0 일 것임 <br>
+ex) d(1,2) = 0.01, d(1,3) = 0.03 <br>
+d(1,2)-d(1,3)<0 이면 잘 mapping 된 것, 따라서 고려할 필요 X <br>
 
 loss:cmul(self.wgt):`clamp(0, loss:max())`
 위에서 얻은 loss에 self.wgt(normalization한 weight)를 곱하고
@@ -208,3 +208,10 @@ loss가 0보다 큰 것들만 wgt에 곱해줌
 self.output = loss:sum()
 ```
 loss들을 다 더함 -> 최종 loss
+
+### 결론
+loss => d(1,2) - d(1,3) + 0.03(margin) = 0으로 만들고자함<br>
+만약 d(1,2) + 0.03 < d(1,3) 이면 고려 대상 X
+d(1,2) + 0.03 = d(1,3)
+d(1,2) + 0.03 = d(1,4) ...
+ 
