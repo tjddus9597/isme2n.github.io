@@ -60,7 +60,7 @@ pairwise ranking loss? <br>
 pairwise mean squared error (PMSE)? 세현이한테 pairwise에 대해서 물어보기 <br>
 $$
 w[||f_i -f_j||^2_2 - ||g_i - g_j||^2_2]
-$$
+$$ <br>
 loss가 0 보다 작을 때는 무시 => w = 0
 loss가 0 보다 클 때는 => w = 1
 
