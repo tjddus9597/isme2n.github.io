@@ -43,3 +43,25 @@ m2 결과 : <br>
 오히려 성능이 떨어짐..
 
 이유? 주관적인 생각 : fc가 많아서 scratch로 학습시키기에는 데이터의 수가 부족함, 그래서 성능이 오히려 떨어지지 않을까 생각함
+
+### 2017-07-14
+
+새로운 loss 제안
+1. 
+$$
+||f_a-f_i||_2^2 - ||f_a-f_j||_2^2 + \delta(1+w) \\
+norm(d_j - d_i) = w 
+$$
+* d_i : ground truth distance \\
+ex) i = 3, j = 4 => w = 0.07, i = 3, j= 15 => w= 0.16
+
+2. 
+pairwise ranking loss? <br>
+pairwise mean squared error (PMSE)? 세현이한테 pairwise에 대해서 물어보기 <br>
+$$
+w[||f_i -f_j||^2_2 - ||g_i - g_j||^2_2]
+loss가 0 보다 작을 때는 무시 => w = 0
+loss가 0 보다 클 때는 => w = 1
+$$
+
+
