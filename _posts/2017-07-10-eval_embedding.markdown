@@ -104,7 +104,7 @@ $$
 $$
 
 <br />
-### FTEmbed.lua
+### FTEmbed.lua - function FTEmbedCriterion:updateOutput(input, gt_dist)
 ```lua
 local idxs = torch.range(1, m):cuda()
 local indc = torch.lt(idxs:repeatTensor(m, 1):t(), idxs:repeatTensor(m, 1))   -- 1(i < j)
@@ -180,12 +180,12 @@ loss:cmul(self.wgt):clamp(0, loss:max())
 ```
 > dist : ({1,2 distance}, {1,3 distance}) ... 63개 <br>
 
-loss =>
+loss => <br>
 $$
 \begin{bmatrix}
-d(1,2)-d(1,2) & d(1,2)-d(1,3) \\
-d(1,3)-d(1,2) & d(1,2)-d(1,3) \\
-d(1,4)-d(1,2) & \ddots
+d(1,2)-d(1,2) & d(1,2)-d(1,3) & d(1,2)-d(1,4)\\
+d(1,3)-d(1,2) & d(1,3)-d(1,3) & d(1,3)-d(1,4)\\
+d(1,4)-d(1,2) & d(1,4)-d(1,3) & \ddots
 \end{bmatrix} + self.mrg
 $$
 
@@ -201,7 +201,7 @@ loss:cmul(self.wgt):`clamp(0, loss:max())`
 -- update the weight coefficients
 self.wgt:cmul(loss:gt(0):cuda())
 ```
-loss가 0보다 큰 것들만 wgt에 곱해줌
+loss가 0보다 큰 것들만 남기고 작은 것들은 0을 곱해서 없애줌
 
 ```lua
 -- loss of this mini-batch
@@ -215,3 +215,57 @@ loss => d(1,2) - d(1,3) + 0.03(margin) = 0으로 만들고자함<br>
 d(1,2) + 0.03 = d(1,3)
 d(1,2) + 0.03 = d(1,4) ...
  
+
+### FTEmbed.lua - function FTEmbedCriterion:updateGradInput(input)
+
+self.gradInput:resize(input:size()) - 64 * 128
+$$
+L = \sum_{i=1,j=1}^{N}[||f_a-f_i||^2_2-||f_a-f_j||^2_2] 
+\\
+\frac{\delta L}{\delta f_a} = \sum_{i=1,j=1}^{N}[2(f_a - f_i) - 2(f_a - f_j)] 
+= \sum_{i=1,j=1}^{N}[2f_j-2f_i]
+$$
+
+```lua
+-- grad for anchor = (f_j - f_i) * coeffs
+local fj_minus_fi = p:t():reshape(r, 1, m):repeatTensor(1, m, 1) - p:t():reshape(r, m, 1):repeatTensor(1, 1, m)
+```
+p => 63, 128 <br>
+p:t() => 128, 63 <br>
+p:t() => reshape(r,1,m) => 128, 1, 63
+p:t():reshape(r,1,m):repeatTensor(1,m,1) => 128,63,63
+
+```lua
+fj_minus_fi = p:t():reshape(r, 1, m):repeatTensor(1, m, 1) - p:t():reshape(r, m, 1):repeatTensor(1, 1, m)```
+
+
+1st dimension <br>
+(2,1) p의 2번째 항목(즉, 3번째 image)과 p의 1번째 항목의 1차원
+원소의 차
+$$
+\begin{bmatrix}
+(1,1) & (2,1) & (3,1) & cdots \\
+(1,2) & (2,2) & (3,2) & cdots \\
+(1,3) & (2,3) & (3,3) & ddots
+\end{bmatrix}
+$$ X 128 <br>
+=> 128, 63, 63
+
+```lua
+self.gradInput[1]:copy(torch.cmul(fj_minus_fi, self.wgt:repeatTensor(r, 1, 1)):sum(2):sum(3):reshape(r))
+```
+fj_minus_fi의 각 차원에 wgt를 곱함. <br>
+sum(2), sum(3) 2차원과 3차원을 다합쳐줌 <br>
+reshape(r) : 1차원 r개의 벡터로 matrix를 수정함
+
+
+```lua
+local fp_minus_fa = (p - a:repeatTensor(m, 1))
+   self.gradInput:sub(2, m+1):copy(torch.cmul(fp_minus_fa, (self.wgt - self.wgt:t()):sum(2):repeatTensor(1, r)))
+```
+$$
+L = \sum_{p=1}^{N}||f_a-f_p||^2_2 = (f_a-f_p)^T(f_a-f_p)
+\\
+\frac{\delta L}{\delta f_a} = \sum_{p=1}^{N} \frac{\delta (f_a^Tf_a-f_a^Tf_p-f_p^Tf_a+f_p^Tf_p)}{\delta f_a}
+=2f_a-2f_p
+$$
