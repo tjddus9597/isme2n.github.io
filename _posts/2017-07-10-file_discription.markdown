@@ -244,9 +244,9 @@ fj_minus_fi = p:t():reshape(r, 1, m):repeatTensor(1, m, 1) - p:t():reshape(r, m,
 원소의 차
 $$
 \begin{bmatrix}
-(1,1) & (2,1) & (3,1) & cdots \\
-(1,2) & (2,2) & (3,2) & cdots \\
-(1,3) & (2,3) & (3,3) & ddots
+(1,1) & (2,1) & (3,1) & \cdots \\
+(1,2) & (2,2) & (3,2) & \cdots \\
+(1,3) & (2,3) & (3,3) & \ddots
 \end{bmatrix}
 $$ X 128 <br>
 => 128, 63, 63
