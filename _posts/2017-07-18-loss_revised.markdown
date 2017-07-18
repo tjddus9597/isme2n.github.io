@@ -19,6 +19,7 @@ function FTEmbedCriterion:updateOutput(input, gt_dist,gt_dist_norm)
 end
 ```
 > gt_dist_norm(dist_smp_norm) : ({1,2 gt_distance}, {1,3 gt_distance}) ... 63개
+
 ```
  0.1258
  0.1293
@@ -84,7 +85,8 @@ end
  0.5317
  0.6653
  ```
-wgt_mrg = mrg * (1 + w)
+
+wgt_mrg = mrg * (1 + w) <br>
 w => <br>
 $$
 \begin{bmatrix}
@@ -107,8 +109,8 @@ $$
 -0.0945 -0.0910 -0.0887 -0.0853 -0.0832 -0.0594 -0.0062 -0.0031 -0.0009  0.0000
 -0.1039 -0.1005 -0.0982 -0.0948 -0.0927 -0.0689 -0.0157 -0.0126 -0.0104 -0.0095
 ```
-<br>
 loss => <br>
+
 $$
 \begin{bmatrix}
 d(1,2)-d(1,2) & d(1,2)-d(1,3) & d(1,2)-d(1,4)\\
