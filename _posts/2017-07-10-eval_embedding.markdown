@@ -236,8 +236,8 @@ p:t() => reshape(r,1,m) => 128, 1, 63
 p:t():reshape(r,1,m):repeatTensor(1,m,1) => 128,63,63
 
 ```lua
-fj_minus_fi = p:t():reshape(r, 1, m):repeatTensor(1, m, 1) - p:t():reshape(r, m, 1):repeatTensor(1, 1, m)```
-
+fj_minus_fi = p:t():reshape(r, 1, m):repeatTensor(1, m, 1) - p:t():reshape(r, m, 1):repeatTensor(1, 1, m)
+```
 
 1st dimension <br>
 (2,1) p의 2번째 항목(즉, 3번째 image)과 p의 1번째 항목의 1차원

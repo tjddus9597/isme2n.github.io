@@ -1,0 +1,23 @@
+---
+layout: post
+title: "[torch] mattorch 설치 방법"
+subtitle:   "개빡치네"
+categories: torch
+tags: library install
+---
+
+### ~/torch/install/bin/torch-activate 
+
+```
+export LUA_PATH='/hdd/sungyeon/home/.luarocks/share/lua/5.1/?.lua;/hdd/sungyeon/home/.luarocks/share/lua/5.1/?/init.lua;/hdd/sungyeon/home/torch/install/share/lua/5.1/?.lua;/hdd/sungyeon/home/torch/install/share/lua/5.1/?/init.lua;./?.lua;/hdd/sungyeon/home/torch/install/share/luajit-2.1.0-beta1/?.lua;'
+export LUA_CPATH='/hdd/sungyeon/home/.luarocks/lib/lua/5.1/?.so;/hdd/sungyeon/home/torch/install/lib/lua/5.1/?.so;./?.so;/usr/local/lib/lua/5.1/?.so;/hdd/sungyeon/home/torch/install/lib/lua/5.1/loadall.so'
+export PATH=/hdd/sungyeon/home/torch/install/bin:$PATH
+export LD_LIBRARY_PATH=/hdd/sungyeon/home/torch/install/lib:$LD_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=/hdd/sungyeon/home/torch/install/lib:$DYLD_LIBRARY_PATH
+export LUA_CPATH='/hdd/sungyeon/home/torch/install/lib/?.so;'$LUA_CPATH
+```                                                                         
+### 설치 코드
+
+```
+MATLAB_ROOT=~/Application/MATLAB/R2016b/ luarocks install mattorch
+```
